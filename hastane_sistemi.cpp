@@ -1,5 +1,8 @@
 #include<iostream>
 #include<vector>
+#include<string>
+#include<stdexcept>
+
 using namespace std;
 
 class Kisi{
@@ -18,7 +21,7 @@ class Kisi{
             return kimlik_no;
         }  
         virtual ~Kisi(){
-            cout << "Kisi silindi";
+            cout << "Kisi silindi" << endl;
         }
         virtual void bilgiYazdir() = 0;
         virtual double Maas() = 0;
@@ -82,11 +85,11 @@ int main() {
     kisiler.push_back(new Doktor(24292, "Elif", 25, "Ortopedi", 135000));
     kisiler.push_back(new Hasta(32832, "Mehmet", 40, "Kırık", 20000));
     
-    for(int i=0;i<4;i++){
+    for(size_t i=0;i<kisiler.size();i++){
         kisiler[i] -> bilgiYazdir();
     }
-    int maas = 0;
-    for(int a=0;a<4;a++){
+    size_t maas = 0;
+    for(size_t a=0;a<kisiler.size();a++){
         if(kisiler[a]->Maas() > kisiler[maas]->Maas()){
             maas = a;
         }
@@ -97,11 +100,17 @@ int main() {
     int kimlik_no = 0;
     cout << "Kimlik numarasi girin: " << endl;
     cin >> kimlik_no;
-    for(int b=0;b<4;b++){
+
+    bool bulundu = false;
+    for(size_t b =0;b<kisiler.size();b++){
         if(kisiler[b]->getKimlik() == kimlik_no){
             kisiler[b]->bilgiYazdir();
+            bulundu = true;
             break;
         }
+    }
+    if(!bulundu){
+        cout << "Kimlik bulunamadi!" << endl;
     }
     try{
         double maas_;
@@ -110,7 +119,7 @@ int main() {
         if(maas_ < 0){
             throw invalid_argument("Maas negatif olamaz");
         }
-        for(int c=0;c<4;c++){
+        for(size_t c=0;c<kisiler.size();c++){
             if(kisiler[c]->Maas() < maas_){
                 kisiler[c]->bilgiYazdir();
             }
@@ -120,7 +129,7 @@ int main() {
         cout << "Aralik hatasi!" << e.what() << endl;
     }
     
-    for(int i=0;i<4;i++){
+    for(size_t i=0;i<kisiler.size();i++){
         delete kisiler[i];
     }
 
